@@ -6,6 +6,7 @@
   "dependencies": {
     "contracts": "https://github.com/drosera-network/contracts",
     "@openzeppelin/contracts": "5.0.0",
+    "@openzeppelin/contracts-upgradeable": "5.0.0",
     "@uniswap/v3-periphery": "^1.4.4"
   }
 }

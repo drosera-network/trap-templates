@@ -5,6 +5,7 @@
       "name": "trap-templates",
       "dependencies": {
         "@openzeppelin/contracts": "5.0.0",
+        "@openzeppelin/contracts-upgradeable": "5.0.0",
         "@uniswap/v3-periphery": "^1.4.4",
         "contracts": "https://github.com/drosera-network/contracts",
       },
@@ -15,6 +16,8 @@
   },
   "packages": {
     "@openzeppelin/contracts": ["@openzeppelin/contracts@5.0.0", "", {}, "sha512-bv2sdS6LKqVVMLI5+zqnNrNU/CA+6z6CmwFXm/MzmOPBRSO5reEJN7z0Gbzvs0/bv/MZZXNklubpwy3v2+azsw=="],
+
+    "@openzeppelin/contracts-upgradeable": ["@openzeppelin/contracts-upgradeable@5.0.0", "", { "peerDependencies": { "@openzeppelin/contracts": "5.0.0" } }, "sha512-D54RHzkOKHQ8xUssPgQe2d/U92mwaiBDY7qCCVGq6VqwQjsT3KekEQ3bonev+BLP30oZ0R1U6YC8/oLpizgC5Q=="],
 
     "@uniswap/lib": ["@uniswap/lib@4.0.1-alpha", "", {}, "sha512-f6UIliwBbRsgVLxIaBANF6w09tYqc6Y/qXdsrbEmXHyFA7ILiKrIwRFXe1yOg8M3cksgVsO9N7yuL2DdCGQKBA=="],
 
