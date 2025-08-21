@@ -21,12 +21,15 @@ struct CollectOutput {
     TransferEvent[] transferEvents;
     ApprovalEvent[] approvalEvents;
     uint256 totalSupply;
+    address userToWatch;
 }
 
 
 contract ERC20Trap is Trap {
     using EventFilterLib for EventFilter;
-    address public immutable token = address(0x0000000000000000000000000000000000000000); // This will be set as the token your are monitoring
+
+    address public token; // This will be set as the token your are monitoring
+    address public userToWatch; // An address to watch for suspicious activity
     
     function collect() external view override returns (bytes memory) {
         uint256 totalSupply = _getTotalSupply();
@@ -84,7 +87,8 @@ contract ERC20Trap is Trap {
         return abi.encode(CollectOutput({
             transferEvents: transferEvents,
             approvalEvents: approvalEvents,
-            totalSupply: totalSupply
+            totalSupply: totalSupply,
+            userToWatch: userToWatch
         }));
     }
 
@@ -93,6 +97,17 @@ contract ERC20Trap is Trap {
     ) external pure override returns (bool, bytes memory) {
         CollectOutput memory currOutput = abi.decode(data[0], (CollectOutput));
         // loop through the data you have collected and check for anomolies
+
+        //Example: Watch for suspicious approval events
+        if (currOutput.approvalEvents.length > 0) {
+            for (uint256 i = 0; i < currOutput.approvalEvents.length; i++) {
+                if (currOutput.approvalEvents[i].owner == currOutput.userToWatch) {
+                    if (currOutput.approvalEvents[i].amount > 100000000) {
+                        return (true, "");
+                    }
+                }
+            }
+        }
         return (false, "");
     }
 
@@ -135,6 +150,13 @@ contract ERC20Trap is Trap {
 
     function _getDecimals() internal view returns (uint8) {
         return IERC20Metadata(token).decimals();
+    }
+
+
+    // Used for testing
+    function setupTest(address _token, address _userToWatch) external {
+        token = _token;
+        userToWatch = _userToWatch;
     }
 
 }
