@@ -28,12 +28,13 @@ struct CollectOutput {
     ApprovalEvent[] approvalEvents;
     ApprovalForAllEvent[] approvalForAllEvents;
     uint256 totalHolding;
+    address userToWatch;
 }
 
 contract ERC721Trap is Trap {
     using EventFilterLib for EventFilter;
-    address public immutable token = address(0x0000000000000000000000000000000000000000); // This will be set as the token you are monitoring
-    address public immutable user = address(0x0000000000000000000000000000000000000000); // This will be set as a user address you're following
+    address public token; // This will be set as the token you are monitoring
+    address public user; // This will be set as a user address you're following
     
     function collect() external view override returns (bytes memory) {
         uint256 totalHolding = _getBalance(user);
@@ -110,7 +111,8 @@ contract ERC721Trap is Trap {
             transferEvents: transferEvents,
             approvalEvents: approvalEvents,
             approvalForAllEvents: approvalForAllEvents,
-            totalHolding: totalHolding
+            totalHolding: totalHolding,
+            userToWatch: user
         }));
     }
 
@@ -118,7 +120,14 @@ contract ERC721Trap is Trap {
         bytes[] calldata data
     ) external pure override returns (bool, bytes memory) {
         CollectOutput memory currOutput = abi.decode(data[0], (CollectOutput));
-        // loop through the data you have collected and check for anomalies
+        //Example: Watch for suspicious approval events
+        if (currOutput.approvalEvents.length > 0) {
+            for (uint256 i = 0; i < currOutput.approvalEvents.length; i++) {
+                if (currOutput.userToWatch == currOutput.approvalEvents[i].owner) {
+                    return (true, "");
+                }
+            }
+        }
         return (false, "");
     }
 
@@ -170,5 +179,11 @@ contract ERC721Trap is Trap {
 
     function _getTokenURI(uint256 tokenId) internal view returns (string memory) {
         return IERC721Metadata(token).tokenURI(tokenId);
+    }
+
+        // Used for testing
+    function setupTest(address _token, address _userToWatch) external {
+        token = _token;
+        user = _userToWatch;
     }
 }

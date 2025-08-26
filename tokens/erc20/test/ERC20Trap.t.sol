@@ -7,6 +7,7 @@ import {EventLog} from "../src/Trap.sol";
 import "forge-std/Vm.sol";
 import "forge-std/StdJson.sol";
 import {AllLogsHelper} from "./utils/Logs.sol";
+import {IERC20} from "@openzeppelin/token/ERC20/extensions/IERC20Metadata.sol";
 
 contract ERC20TrapTest is AllLogsHelper {
     uint256 forkId;
@@ -17,14 +18,16 @@ contract ERC20TrapTest is AllLogsHelper {
     address constant USER_TO_WATCH = 0xD525FF06f7805E8dd26964F5970eDB5b2c97D939;
 
     function setUp() public {
-        forkId = vm.createSelectFork(vm.rpcUrl("mainnet"));
+        forkId = vm.createSelectFork(vm.rpcUrl("ethereum"));
+
         trap = new ERC20Trap();
         trap.setupTest(USDC, USER_TO_WATCH);
     }
 
     function test_collect_with_real_mainnet_logs() public {
 
-        getAllLogs(19000000, 19000000, new bytes32[](0));
+
+        // getAllLogs(19000000, 19000000, new bytes32[](0)); // test this later
         
         // capture one block of logs
         Vm.EthGetLogs[] memory usdcLogs = vm.eth_getLogs(

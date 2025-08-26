@@ -2,3 +2,6 @@
 src = "src"
 out = "out"
 libs = ["../../node_modules"]
+
+[rpc_endpoints]
+ethereum = "${MAINNET_RPC_URL}"
