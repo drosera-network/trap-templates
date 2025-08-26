@@ -2,6 +2,7 @@
 pragma solidity ^0.8.20;
 
 import {Trap, EventFilter, EventFilterLib, EventLog} from "./Trap.sol";
+import {console} from "forge-std/console.sol";
 
 struct SupplyEvent {
     address reserve;
@@ -87,8 +88,7 @@ struct CollectOutput {
 contract AaveTrap is Trap {
     using EventFilterLib for EventFilter;
 
-    address public immutable poolDataProvider = address(0x0000000000000000000000000000000000000000); // Aave Pool Data Provider
-    address public immutable lendingPool = address(0x0000000000000000000000000000000000000000); // Aave Lending Pool
+    address public lendingPool; // Aave Lending Pool
 
     function collect() external view override returns (bytes memory) {
         // Get the captured events for the block
@@ -115,6 +115,7 @@ contract AaveTrap is Trap {
         ReserveUsedAsCollateralEvent[] memory collateralEvents = new ReserveUsedAsCollateralEvent[](collateralCount);
         SwapEvent[] memory swapEvents = new SwapEvent[](swapCount);
 
+        
         (
             uint256 totalSupplyVolume,
             uint256 totalBorrowVolume,
@@ -155,8 +156,15 @@ contract AaveTrap is Trap {
 
     function shouldRespond(bytes[] calldata data) external pure override returns (bool, bytes memory) {
         CollectOutput memory currOutput = abi.decode(data[0], (CollectOutput));
-        // loop through the data you have collected and check for anomalies
-        // e.g., large liquidations, unusual borrowing patterns, flash loan attacks
+        //Example: Watch for supply events over a certain amount
+        if (currOutput.supplyEvents.length > 0) {
+            for (uint256 i = 0; i < currOutput.supplyEvents.length; i++) {
+                if (currOutput.supplyEvents[i].amount > 10000000) {
+                        return (true, "");
+                    }
+                }
+        }
+
         return (false, "");
     }
 
@@ -251,7 +259,7 @@ contract AaveTrap is Trap {
         SwapEvent[] memory swapEvents
     )
         internal
-        pure
+        view
         returns (
             uint256 totalSupplyVolume,
             uint256 totalBorrowVolume,
@@ -313,13 +321,13 @@ contract AaveTrap is Trap {
 
     function _parseSupplyEvent(EventLog memory log) internal pure returns (SupplyEvent memory supplyEvent) {
         address reserve = address(uint160(uint256(log.topics[1])));
-        address user = address(uint160(uint256(log.topics[2])));
-        address onBehalfOf = address(uint160(uint256(log.topics[3])));
+        uint16 referralCode = uint16(uint256(log.topics[3]));
+        address onBehalfOf = address(uint160(uint256(log.topics[2])));
 
-        (uint256 amount, uint16 referral) = abi.decode(log.data, (uint256, uint16));
+        (address user, uint256 amount) = abi.decode(log.data, (address, uint256));
 
         supplyEvent =
-            SupplyEvent({reserve: reserve, user: user, onBehalfOf: onBehalfOf, amount: amount, referral: referral});
+            SupplyEvent({reserve: reserve, user: user, onBehalfOf: onBehalfOf, amount: amount, referral: referralCode});
     }
 
     function _parseBorrowEvent(EventLog memory log) internal pure returns (BorrowEvent memory borrowEvent) {
@@ -431,5 +439,10 @@ contract AaveTrap is Trap {
         (uint256 rateMode) = abi.decode(log.data, (uint256));
 
         swapEvent = SwapEvent({reserve: reserve, user: user, rateMode: rateMode});
+    }
+
+    // Used for testing
+    function setupTest(address _lendingPool) external {
+        lendingPool = _lendingPool;
     }
 }

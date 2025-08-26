@@ -66,7 +66,7 @@ struct CollectOutput {
 contract UniswapTrap is Trap {
     using EventFilterLib for EventFilter;
 
-    address public immutable pool = address(0x0000000000000000000000000000000000000000); // This will be set as the Uniswap V3 pool you are monitoring
+    address public pool; // This will be set as the Uniswap V3 pool you are monitoring
 
     function collect() external view override returns (bytes memory) {
         // Get the captured events for the block
@@ -100,10 +100,19 @@ contract UniswapTrap is Trap {
 
     function shouldRespond(bytes[] calldata data) external pure override returns (bool, bytes memory) {
         CollectOutput memory currOutput = abi.decode(data[0], (CollectOutput));
-        // loop through the data you have collected and check for anomalies
-        // e.g., large swaps, unusual liquidity changes, flash loan attacks
-        return (false, "");
-    }
+        //Example: Watch for swap events over a certain amount
+        if (currOutput.swapEvents.length > 0) {
+            for (uint256 i = 0; i < currOutput.swapEvents.length; i++) {
+                if (currOutput.swapEvents[i].amount1 > 10000000) {
+                        return (true, "");
+                    }
+                }
+        }
+
+            return (false, "");
+        }
+        
+    
 
     function eventLogFilters() public view override returns (EventFilter[] memory) {
         EventFilter[] memory filters = new EventFilter[](5);
@@ -322,6 +331,11 @@ contract UniswapTrap is Trap {
             paid0: paid0,
             paid1: paid1
         });
+    }
+
+    // Used for testing
+    function setupTest(address _pool) external {
+        pool = _pool;
     }
 }
 
