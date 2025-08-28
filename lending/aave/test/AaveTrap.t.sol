@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import {Test, console} from "forge-std/Test.sol";
-import {EventLog, EventFilter} from "../src/Trap.sol";
+import {Trap, EventFilter, EventFilterLib, EventLog} from "drosera-contracts/Trap.sol";
 import "forge-std/Vm.sol";
 import {AaveTrap, CollectOutput} from "../src/AaveTrap.sol";
 

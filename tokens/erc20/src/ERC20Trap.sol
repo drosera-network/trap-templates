@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
-import {Trap, EventFilter, EventFilterLib, EventLog} from "./Trap.sol";
+import {Trap, EventFilter, EventFilterLib, EventLog} from "drosera-contracts/Trap.sol";
 import {IERC20, IERC20Metadata} from "@openzeppelin/token/ERC20/extensions/IERC20Metadata.sol";
 
 struct TransferEvent {

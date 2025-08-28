@@ -1,1 +1,2 @@
 @openzeppelin/=../../node_modules/@openzeppelin/contracts/
+drosera-contracts/=../../node_modules/drosera-contracts/src/

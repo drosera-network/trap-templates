@@ -1,3 +1,4 @@
 @openzeppelin/=../../node_modules/@openzeppelin/contracts/
 @forge-std/=lib/forge-std/src/
 contracts-upgradeable/=../../node_modules/@openzeppelin/contracts-upgradeable/
+drosera-contracts/=../../node_modules/drosera-contracts/src/

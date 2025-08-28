@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-import {Trap, EventFilter, EventFilterLib, EventLog} from "./Trap.sol";
+import {Trap, EventFilter, EventFilterLib, EventLog} from "drosera-contracts/Trap.sol";
 import {StorageSlot} from "@openzeppelin/utils/StorageSlot.sol";
 
 struct UpgradedEvent {

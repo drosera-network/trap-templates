@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import {Test, console} from "forge-std/Test.sol";
 import {ERC721Trap, CollectOutput} from "../src/ERC721Trap.sol";
-import {EventLog, EventFilter} from "../src/Trap.sol";
+import {Trap, EventFilter, EventFilterLib, EventLog} from "drosera-contracts/Trap.sol";
 import "forge-std/Vm.sol";
 import {IERC721} from "@openzeppelin/token/ERC721/extensions/IERC721Metadata.sol";
 

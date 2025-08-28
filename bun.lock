@@ -7,7 +7,7 @@
         "@openzeppelin/contracts": "5.0.0",
         "@openzeppelin/contracts-upgradeable": "5.0.0",
         "@uniswap/v3-periphery": "^1.4.4",
-        "contracts": "https://github.com/drosera-network/contracts",
+        "drosera-contracts": "https://github.com/drosera-network/contracts",
       },
       "devDependencies": {
         "forge-std": "github:foundry-rs/forge-std#v1.8.1",
@@ -29,7 +29,7 @@
 
     "base64-sol": ["base64-sol@1.0.1", "", {}, "sha512-ld3cCNMeXt4uJXmLZBHFGMvVpK9KsLVEhPpFRXnvSVAqABKbuNZg/+dsq3NuM+wxFLb/UrVkz7m1ciWmkMfTbg=="],
 
-    "contracts": ["contracts@github:drosera-network/contracts#3a89d13", {}, "drosera-network-contracts-3a89d13"],
+    "drosera-contracts": ["@drosera/contracts@github:drosera-network/contracts#1620415", {}, "drosera-network-contracts-1620415"],
 
     "forge-std": ["forge-std@github:foundry-rs/forge-std#bb4ceea", {}, "foundry-rs-forge-std-bb4ceea"],
 

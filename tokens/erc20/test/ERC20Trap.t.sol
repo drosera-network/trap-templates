@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import {Test, console} from "forge-std/Test.sol";
 import {ERC20Trap, CollectOutput} from "../src/ERC20Trap.sol";
-import {EventLog} from "../src/Trap.sol";
+import {Trap, EventFilter, EventFilterLib, EventLog} from "drosera-contracts/Trap.sol";
 import "forge-std/Vm.sol";
 import "forge-std/StdJson.sol";
 import {AllLogsHelper} from "./utils/Logs.sol";

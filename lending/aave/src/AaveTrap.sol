@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
-import {Trap, EventFilter, EventFilterLib, EventLog} from "./Trap.sol";
-import {console} from "forge-std/console.sol";
+import {Trap, EventFilter, EventFilterLib, EventLog} from "drosera-contracts/Trap.sol";
 
 struct SupplyEvent {
     address reserve;
